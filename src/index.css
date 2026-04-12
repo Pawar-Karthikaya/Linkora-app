@@ -1,4 +1,86 @@
+/* ── Light theme ── */
+:root, [data-theme="light"] {
+    --bg-primary:       #ffffff;
+    --bg-secondary:     #f7f7f7;
+    --bg-hover:         #f0eeff;
+    --bg-active:        #ebe7ff;
+
+    --text-primary:     #111111;
+    --text-secondary:   #555555;
+    --text-muted:       #999999;
+
+    --border:           #e8e8e8;
+    --border-strong:    #d0d0d0;
+
+    --accent:           #7c6ff7;
+    --accent-hover:     #6459e0;
+    --accent-text:      #ffffff;
+
+    --bubble-mine:      #7c6ff7;
+    --bubble-mine-text: #ffffff;
+    --bubble-other:     #f0f0f0;
+    --bubble-other-text:#111111;
+
+    --sidebar-width:    320px;
+    --rail-width:       60px;
+
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+    --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
+}
+
+/* ── Dark theme ── */
+[data-theme="dark"] {
+    --bg-primary:       #1a1a1a;
+    --bg-secondary:     #242424;
+    --bg-hover:         #2a2440;
+    --bg-active:        #2f2850;
+
+    --text-primary:     #f0f0f0;
+    --text-secondary:   #aaaaaa;
+    --text-muted:       #666666;
+
+    --border:           #2e2e2e;
+    --border-strong:    #3a3a3a;
+
+    --accent:           #7c6ff7;
+    --accent-hover:     #9d93f9;
+    --accent-text:      #ffffff;
+
+    --bubble-mine:      #7c6ff7;
+    --bubble-mine-text: #ffffff;
+    --bubble-other:     #2e2e2e;
+    --bubble-other-text:#f0f0f0;
+
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
+    --shadow-md: 0 4px 16px rgba(0,0,0,0.4);
+}
+
+/* ── Global reset ── */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body, #root {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
 
 body {
-  margin: 0;
+    font-family: 'Inter', sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    transition: background 0.2s, color 0.2s;
+    -webkit-font-smoothing: antialiased;
 }
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 99px; }
+
+/* ── Utility ── */
+button { cursor: pointer; font-family: 'Inter', sans-serif; }
+input  { font-family: 'Inter', sans-serif; }

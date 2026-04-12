@@ -31,7 +31,7 @@ function Register() {
   useEffect(() => {
     const fetchCountries = async () => {
       try {
-        const res = await API.get("countrycode/");
+        const res = await API.get("users/countrycode/");
         setCountryCodes(res.data);
         // Default to India (id=2) if present, else first entry
         const india = res.data.find((c) => c.country_name === "India");
@@ -53,9 +53,9 @@ function Register() {
     try {
       // country_code now carries the id (integer) from the API
       const payload = { ...form, country_code: parseInt(form.country_code) };
-      const res = await API.post("users/", payload);
+      const res = await API.post("users/users/", payload);
       console.log(res.data);
-      alert("Account created! Please login.");
+      navigate("/");
     } catch (err) {
       console.log(err.response?.data);
       alert("Registration failed. Please check your details.");
