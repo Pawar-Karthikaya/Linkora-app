@@ -1,24 +1,30 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import API from "../services/api"; // ✅ correct
 
 function Login() {
   const [form, setForm] = useState({ email: "", password: "", remember: false });
+  const navigate = useNavigate(); // ✅ initialize
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // ✅ works now because button is inside a <form>
+    e.preventDefault();
     try {
-      const res = await API.post("login/", { 
-        email: form.email,
-        password: form.password,
-      });
-      console.log(res.data);
-      alert("Login successful!");
+        const res = await API.post("users/login/", {   // ✅ fixed URL (from bug #17)
+            email: form.email,
+            password: form.password,
+        });
+
+        localStorage.setItem("access", res.data.access);    // ✅ matches backend key
+        localStorage.setItem("refresh", res.data.refresh);  // ✅ save refresh token too
+        localStorage.setItem("user", JSON.stringify(res.data.user)); // ✅ save user info for avatar/name
+
+        navigate("/home");
     } catch (err) {
-      console.log(err.response?.data); // ✅ safe with optional chaining
-      alert("Login failed. Check your credentials.");
+        console.log(err.response?.data);
+        alert("Login failed. Check your credentials.");
     }
-  };
+};
+
 
   const inputStyle = {
     width: "100%", padding: "11px 14px", border: "1.5px solid #d0d0d0",
