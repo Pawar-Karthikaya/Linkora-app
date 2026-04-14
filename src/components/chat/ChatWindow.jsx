@@ -80,7 +80,7 @@ function EmptyState() {
 }
 
 
-function ChatHeader({ conversation, currentUserId, onBack }) {
+function ChatHeader({ conversation, currentUserId, onBack, wsStatus}) {
     const otherParticipant = conversation.participants?.find(
         p => p.id !== currentUserId
     );
@@ -149,12 +149,21 @@ function ChatHeader({ conversation, currentUserId, onBack }) {
                 }}>
                     {name}
                 </p>
+                
                 <p style={{
-                    fontSize:   12,
-                    color:      "var(--text-muted)",
-                    marginTop:  1,
+                    fontSize:  12,
+                    color:     wsStatus === "connected"
+                        ? "#22c55e"
+                        : wsStatus === "connecting"
+                        ? "#f59e0b"
+                        : "var(--text-muted)",
+                    marginTop: 1,
                 }}>
-                    @{otherParticipant?.username || "unknown"}
+                    {wsStatus === "connected"
+                        ? "Online"
+                        : wsStatus === "connecting"
+                        ? "Connecting..."
+                        : "Offline"}
                 </p>
             </div>
 
@@ -263,6 +272,7 @@ function ChatWindow({
     onSend,
     currentUserId,
     onBack,
+    wsStatus,
 }) {
     // ── No conversation selected ─────────────────────────────────────────────
     if (!conversation) return <EmptyState />;
@@ -289,6 +299,7 @@ function ChatWindow({
                 conversation={conversation}
                 currentUserId={currentUserId}
                 onBack={onBack}
+                wsStatus={wsStatus}
             />
 
             {/* ── Messages area ── */}
