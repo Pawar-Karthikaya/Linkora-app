@@ -20,6 +20,7 @@ function Home() {
         updateLastMessage,
         searchResults,
         searching,
+        wsStatus,
         searchUsers,
         clearSearch,
     } = useConversations();
@@ -246,6 +247,7 @@ function Home() {
                 loading={messagesLoading}
                 error={messagesError}
                 sending={sending}
+                wsStatus={wsStatus}
                 bottomRef={bottomRef}
                 onSend={sendMessage}
                 currentUserId={currentUser.id}
