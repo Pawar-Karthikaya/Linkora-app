@@ -80,7 +80,7 @@ function EmptyState() {
 }
 
 
-function ChatHeader({ conversation, currentUserId, onBack, wsStatus}) {
+function ChatHeader({ conversation, currentUserId, onBack, wsStatus, onlineUsers }) {
     const otherParticipant = conversation.participants?.find(
         p => p.id !== currentUserId
     );
@@ -90,6 +90,9 @@ function ChatHeader({ conversation, currentUserId, onBack, wsStatus}) {
             || otherParticipant.username
         : "Unknown";
 
+    const isOtherOnline = onlineUsers?.some(
+        id => String(id) === String(otherParticipant?.id)
+    );
     return (
         <div style={{
             display:      "flex",
@@ -134,7 +137,7 @@ function ChatHeader({ conversation, currentUserId, onBack, wsStatus}) {
                 name={name}
                 size={40}
                 showStatus
-                isOnline={false} // WebSocket later
+                isOnline={isOtherOnline} 
             />
 
             {/* Name + status */}
@@ -152,18 +155,12 @@ function ChatHeader({ conversation, currentUserId, onBack, wsStatus}) {
                 
                 <p style={{
                     fontSize:  12,
-                    color:     wsStatus === "connected"
-                        ? "#22c55e"
-                        : wsStatus === "connecting"
-                        ? "#f59e0b"
-                        : "var(--text-muted)",
+                    color:     isOtherOnline ? "#22c55e" : "var(--text-muted)",
                     marginTop: 1,
-                }}>
-                    {wsStatus === "connected"
-                        ? "Online"
-                        : wsStatus === "connecting"
-                        ? "Connecting..."
-                        : "Offline"}
+                }}
+                >
+                    {isOtherOnline ? "Online" : "Offline"}
+                    
                 </p>
             </div>
 
@@ -273,6 +270,7 @@ function ChatWindow({
     currentUserId,
     onBack,
     wsStatus,
+    onlineUsers,
 }) {
     // ── No conversation selected ─────────────────────────────────────────────
     if (!conversation) return <EmptyState />;
@@ -300,6 +298,7 @@ function ChatWindow({
                 currentUserId={currentUserId}
                 onBack={onBack}
                 wsStatus={wsStatus}
+                onlineUsers={onlineUsers}
             />
 
             {/* ── Messages area ── */}

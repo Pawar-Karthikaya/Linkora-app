@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import API from "../services/api";
 
 function scorePassword(p) {
@@ -14,6 +14,7 @@ function scorePassword(p) {
 const STRENGTH_COLORS = ["#e24b4a", "#ef9f27", "#7c6ff7", "#1d9e75"];
 
 function Register() {
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     first_name: "",
     last_name: "",
