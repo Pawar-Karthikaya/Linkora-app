@@ -1,10 +1,9 @@
 import { Navigate } from "react-router-dom";
+import { clearAuth, hasValidAuthSession } from "../services/auth";
 
 function ProtectedRoute({ children }) {
-    const token = localStorage.getItem("access");
-
-    if (!token) {
-        // Not logged in → redirect to login page
+    if (!hasValidAuthSession()) {
+        clearAuth();
         return <Navigate to="/" replace />;
     }
 

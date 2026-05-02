@@ -1,3 +1,4 @@
+// hooks/useMessages.js
 import { useState, useEffect, useCallback, useRef } from "react";
 import API from "../services/api";
 
@@ -11,7 +12,7 @@ function useMessages(activeConversation, onMessageSent) {
     const wsRef                     = useRef(null);  // holds WebSocket instance
     const reconnectTimer            = useRef(null);  // holds reconnect timer
     const reconnectAttempts         = useRef(0);     // counts reconnect attempts
-
+    const [onlineUsers, setOnlineUsers] = useState([]);
     // ── Scroll to bottom ─────────────────────────────────────────────────────
     const scrollToBottom = useCallback(() => {
         bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -77,10 +78,22 @@ function useMessages(activeConversation, onMessageSent) {
 
      // ── On message received ──────────────────────────────────────────────
 
-     const [onlineUsers, setOnlineUsers] = useState([]);
+
 ws.onmessage = (event) => {
     try {
         const data = JSON.parse(event.data);
+        if (data.type === "presence") {
+            setOnlineUsers(prev => {
+                if (data.status === "online") {
+                    return prev.includes(data.user_id)
+                        ? prev
+                        : [...prev, data.user_id];
+                } else {
+                    return prev.filter(id => id !== data.user_id);
+                }
+            });
+            return;
+        }
 
         if (data.type === "message") {
             const incomingMessage = data.message;
@@ -285,6 +298,7 @@ ws.onmessage = (event) => {
             setMessages([]);
             setError(null);
             setWsStatus("disconnected");
+            setOnlineUsers([]);
         }
     }, [activeConversation]);
 
@@ -298,6 +312,7 @@ ws.onmessage = (event) => {
         bottomRef,
         sendMessage,
         markAsRead,
+        onlineUsers,
     };
 }
 

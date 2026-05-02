@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar/Sidebar";
-import ChatWindow from "../components/Chat/ChatWindow";
+import ChatWindow from "../components/chat/ChatWindow";
 import useConversations from "../hooks/useConversations";
 import useMessages from "../hooks/useMessages";
 
@@ -20,20 +20,20 @@ function Home() {
         updateLastMessage,
         searchResults,
         searching,
-        wsStatus,
         searchUsers,
         clearSearch,
     } = useConversations();
-
     // ── Messages hook ────────────────────────────────────────────────────────
     const {
-        messages,
-        loading:  messagesLoading,
-        error:    messagesError,
-        sending,
-        bottomRef,
-        sendMessage,
-    } = useMessages(activeConversation, updateLastMessage);
+    messages,
+    loading:  messagesLoading,
+    error:    messagesError,
+    sending,
+    wsStatus,       
+    onlineUsers,
+    bottomRef,
+    sendMessage,
+} = useMessages(activeConversation, updateLastMessage);
 
     // ── Handlers ─────────────────────────────────────────────────────────────
     const handleSelectConversation = (conversation) => {
@@ -247,7 +247,8 @@ function Home() {
                 loading={messagesLoading}
                 error={messagesError}
                 sending={sending}
-                wsStatus={wsStatus}
+                wsStatus={wsStatus}        
+                onlineUsers={onlineUsers}  
                 bottomRef={bottomRef}
                 onSend={sendMessage}
                 currentUserId={currentUser.id}
